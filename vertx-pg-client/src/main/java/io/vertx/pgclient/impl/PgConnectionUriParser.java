@@ -161,9 +161,10 @@ public class PgConnectionUriParser {
       if (indexOfDelimiter < 0) {
         throw new IllegalArgumentException(format("Missing delimiter '=' of parameters \"%s\" in the part \"%s\"", parametersInfo, parameterPair));
       } else {
-        String key = parameterPair.substring(0, indexOfDelimiter).toLowerCase();
+        String actualKey = parameterPair.substring(0, indexOfDelimiter);
+        String lowerCaseKey = actualKey.toLowerCase();
         String value = decodeUrl(parameterPair.substring(indexOfDelimiter + 1).trim());
-        switch (key) {
+        switch (lowerCaseKey) {
           case "port":
             parsePort(value, configuration);
             break;
@@ -195,7 +196,7 @@ public class PgConnectionUriParser {
             properties.put("search_path", value);
             break;
           default:
-            configuration.put(key, value);
+            properties.put(actualKey, value);
             break;
         }
       }

@@ -156,9 +156,10 @@ public class DB2ConnectionUriParser {
         throw new IllegalArgumentException(
             format("Missing delimiter '=' of parameters \"%s\" in the part \"%s\"", attributesInfo, parameterPair));
       } else {
-        String key = parameterPair.substring(0, indexOfDelimiter).toLowerCase();
+        String actualKey = parameterPair.substring(0, indexOfDelimiter);
+        String lowerCaseKey = actualKey.toLowerCase();
         String value = decodeUrl(parameterPair.substring(indexOfDelimiter + 1).trim());
-        switch (key) {
+        switch (lowerCaseKey) {
         // Base Connection Parameters
         case "user":
           configuration.put("user", value);
@@ -179,7 +180,7 @@ public class DB2ConnectionUriParser {
           configuration.put("database", value);
           break;
         default:
-          configuration.put(key, value);
+            properties.put(actualKey, value);
           break;
         }
       }
