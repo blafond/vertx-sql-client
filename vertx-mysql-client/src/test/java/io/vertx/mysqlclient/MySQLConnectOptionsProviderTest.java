@@ -11,6 +11,9 @@
 
 package io.vertx.mysqlclient;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -139,6 +142,25 @@ public class MySQLConnectOptionsProviderTest {
     expectedConfiguration = new MySQLConnectOptions()
       .setHost("myhost")
       .setUseAffectedRows(false);
+
+    assertEquals(expectedConfiguration, actualConfiguration);
+  }
+
+  @Test
+  public void testValidUriExtraProperties() {
+    connectionUri = "mysql://myhost?useAffectedRows=all_except_true_is_false&Prop1=value1&prop2=value2&prop3=value3&loggerLevel=OFF";
+    actualConfiguration = MySQLConnectOptions.fromUri(connectionUri);
+
+    Map<String, String> expectedProperties = new HashMap<>();
+    expectedProperties.put("Prop1", "value1");
+    expectedProperties.put("prop2", "value2");
+    expectedProperties.put("prop3", "value3");
+    expectedProperties.put("loggerLevel", "OFF");
+
+    expectedConfiguration = new MySQLConnectOptions()
+      .setHost("myhost")
+      .setUseAffectedRows(false)
+      .setProperties(expectedProperties);
 
     assertEquals(expectedConfiguration, actualConfiguration);
   }
