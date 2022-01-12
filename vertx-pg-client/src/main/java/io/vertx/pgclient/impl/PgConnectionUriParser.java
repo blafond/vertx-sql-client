@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +37,7 @@ import static java.lang.String.format;
  * @author Billy Yuan <billy112487983@gmail.com>
  */
 public class PgConnectionUriParser {
+  private static final Logger LOG = Logger.getLogger(PgConnectionUriParser.class.getName());
 
   private static final String SCHEME_DESIGNATOR_REGEX = "postgre(s|sql)://"; // URI scheme designator
   private static final String USER_INFO_REGEX = "((?<userinfo>[a-zA-Z0-9\\-._~%!*]+(:[a-zA-Z0-9\\-._~%!*]+)?)@)?"; // user name and password
@@ -196,7 +198,8 @@ public class PgConnectionUriParser {
             properties.put("search_path", value);
             break;
           default:
-            properties.put(actualKey, value);
+            LOG.warning( " connection URL property: [ " + actualKey + "=" + value + " ] is not currently supported" );
+            configuration.put(actualKey, value);
             break;
         }
       }

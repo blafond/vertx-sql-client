@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,7 @@ import static java.lang.String.format;
  * The format is defined by the client in an idiomatic way: sqlserver://[user[:[password]]@]host[:port][/database][?attribute1=value1&attribute2=value2...
  */
 public class MSSQLConnectionUriParser {
+  private static final Logger LOG = Logger.getLogger(MSSQLConnectionUriParser.class.getName());
 
   private static final String SCHEME_DESIGNATOR_REGEX = "(sqlserver)://"; // URI scheme designator
   private static final String USER_INFO_REGEX = "((?<userinfo>[a-zA-Z0-9\\-._~%!*]+(:[a-zA-Z0-9\\-._~%!*^]*)?)@)?"; // user name and password
@@ -176,7 +178,8 @@ public class MSSQLConnectionUriParser {
             configuration.put("database", value);
             break;
           default:
-            properties.put(actualKey, value);
+            LOG.warning( " connection URL property: [ " + actualKey + "=" + value + " ] is not currently supported" );
+            configuration.put(actualKey, value);
             break;
         }
       }

@@ -151,16 +151,11 @@ public class MySQLConnectOptionsProviderTest {
     connectionUri = "mysql://myhost?useAffectedRows=all_except_true_is_false&Prop1=value1&prop2=value2&prop3=value3&loggerLevel=OFF";
     actualConfiguration = MySQLConnectOptions.fromUri(connectionUri);
 
-    Map<String, String> expectedProperties = new HashMap<>();
-    expectedProperties.put("Prop1", "value1");
-    expectedProperties.put("prop2", "value2");
-    expectedProperties.put("prop3", "value3");
-    expectedProperties.put("loggerLevel", "OFF");
-
+    // NOTE:  extra properties that aren't supported will log WARNING messages
+    // so only check valid properties
     expectedConfiguration = new MySQLConnectOptions()
       .setHost("myhost")
-      .setUseAffectedRows(false)
-      .setProperties(expectedProperties);
+      .setUseAffectedRows(false);
 
     assertEquals(expectedConfiguration, actualConfiguration);
   }

@@ -193,13 +193,11 @@ public class PgConnectOptionsTest {
     connectionUri = "postgresql://?fallback_application_name=myapp&search_path=myschema&Prop1=value1&prop2=value2&prop3=value3&loggerLevel=OFF";
     actualConfiguration = PgConnectOptions.fromUri(connectionUri);
 
+    // NOTE:  extra properties that aren't supported will log WARNING messages
+    // so only check valid properties
     Map<String, String> expectedProperties = new HashMap<>();
     expectedProperties.put("fallback_application_name", "myapp");
     expectedProperties.put("search_path", "myschema");
-    expectedProperties.put("Prop1", "value1");
-    expectedProperties.put("prop2", "value2");
-    expectedProperties.put("prop3", "value3");
-    expectedProperties.put("loggerLevel", "OFF");
 
     expectedConfiguration = new PgConnectOptions()
       .setProperties(expectedProperties);

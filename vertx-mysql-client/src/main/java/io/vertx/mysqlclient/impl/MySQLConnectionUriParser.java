@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,7 @@ import static java.lang.String.format;
  * @see <a href="https://dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html#connecting-using-uri">MySQL official documentation</a>: [scheme://][user[:[password]]@]host[:port][/schema][?attribute1=value1&attribute2=value2...
  */
 public class MySQLConnectionUriParser {
+  private static final Logger LOG = Logger.getLogger(MySQLConnectionUriParser.class.getName());
 
   private static final String SCHEME_DESIGNATOR_REGEX = "(mysql|mariadb)://"; // URI scheme designator
   private static final String USER_INFO_REGEX = "((?<userinfo>[a-zA-Z0-9\\-._~%!*]+(:[a-zA-Z0-9\\-._~%!*]*)?)@)?"; // user name and password
@@ -180,7 +182,8 @@ public class MySQLConnectionUriParser {
             break;
           //TODO Additional Connection Parameters
           default:
-            properties.put(actualKey, value);
+            LOG.warning( " connection URL property: [ " + actualKey + "=" + value + " ] is not currently supported" );
+            configuration.put(actualKey, value);
             break;
         }
       }

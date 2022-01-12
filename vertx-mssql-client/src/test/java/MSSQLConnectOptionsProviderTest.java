@@ -111,19 +111,14 @@ public class MSSQLConnectOptionsProviderTest {
     connectionUri = "sqlserver://other@localhost/otherdb?port=3306&password=secret&Prop1=value1&prop2=value2&prop3=value3&encrypt=FALSE";
     actualConfiguration = MSSQLConnectOptions.fromUri(connectionUri);
 
-    Map<String, String> expectedProperties = new HashMap<>();
-    expectedProperties.put("Prop1", "value1");
-    expectedProperties.put("prop2", "value2");
-    expectedProperties.put("prop3", "value3");
-    expectedProperties.put("encrypt", "FALSE");
-
+    // NOTE:  extra properties that aren't supported will log WARNING messages
+    // so only check valid properties
     expectedConfiguration = new MSSQLConnectOptions()
       .setUser("other")
       .setPassword("secret")
       .setHost("localhost")
       .setPort(3306)
-      .setDatabase("otherdb")
-      .setProperties(expectedProperties);
+      .setDatabase("otherdb");
 
     assertEquals(expectedConfiguration, actualConfiguration);
   }
